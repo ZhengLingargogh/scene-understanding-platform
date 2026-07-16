@@ -1,21 +1,52 @@
-fastapi>=0.115.0
-uvicorn[standard]>=0.32.0
-pydantic>=2.9.0
-pydantic-settings>=2.6.0
-python-multipart>=0.0.12
-sqlalchemy>=2.0.0
+# =============================================================================
+# Scene Understanding Platform — Python 3.10+（推荐 Conda 环境 sup）
+# =============================================================================
+#
+# 安装步骤：
+#
+#   conda create -n sup python=3.10 -y
+#   conda activate sup
+#   cd backend
+#
+#   # 1) PyTorch：按显卡/CUDA 选择（示例为 CUDA 11.8）
+#   pip install torch==2.2.2 torchvision==0.17.2 \
+#       --index-url https://download.pytorch.org/whl/cu118
+#
+#   # 其他 CUDA 版本：
+#   # CUDA 12.1: .../whl/cu121
+#   # 仅 CPU:    pip install torch==2.2.2 torchvision==0.17.2
+#
+#   # 2) 本文件其余依赖
+#   pip install -r requirements.txt
+#
+#   # 3) 修复 OpenCV 与 NumPy 兼容性（必做）
+#   bash scripts/fix_sup_opencv.sh
+#
+#   # 4) 启动后端（必须在 backend 目录）
+#   uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+#
+# 注意：
+#   - 勿用 conda install opencv，会与 numpy 1.26 ABI 冲突
+#   - LightGlue 通过 third_party/lightglue 加入 sys.path，无需 pip 安装
+# =============================================================================
 
-# ACE localization (install torch separately in your ACE conda env — do not upgrade)
-numpy>=1.24.0,<2
-scipy>=1.10.0
-Pillow>=9.0.0
-# OpenCV: prefer pip wheel (conda-forge 4.13 breaks findContours with numpy 1.26).
-# See scripts/fix_sup_opencv.sh
+# --- Web API ---
+fastapi>=0.115.0,<0.116.0
+uvicorn[standard]>=0.32.0,<0.35.0
+pydantic>=2.9.0,<3.0.0
+pydantic-settings>=2.6.0,<3.0.0
+python-multipart>=0.0.12
+sqlalchemy>=2.0.0,<3.0.0
+
+# --- 数值 / 图像 ---
+numpy>=1.24.0,<2.0.0
+scipy>=1.10.0,<2.0.0
+Pillow>=9.0.0,<12.0.0
 opencv-python-headless==4.10.0.84
 
-# SALAD / NetVLAD / SuperPoint / LightGlue (install in ACE conda env)
-torchvision>=0.15.0
-kornia>=0.7.0
+# --- 深度学习（torch 见上方单独安装）---
+torchvision>=0.17.0,<0.18.0
+kornia>=0.7.0,<0.8.0
 
-# dsacstar: install separately from ace-main/dsacstar:
-#   cd ../../ace-main/dsacstar && pip install .
+# --- 第三方源码（SAM 交互 / 语义分割）---
+-e ../third_party/segment-anything
