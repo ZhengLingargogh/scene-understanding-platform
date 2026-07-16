@@ -1,0 +1,21 @@
+fastapi>=0.115.0
+uvicorn[standard]>=0.32.0
+pydantic>=2.9.0
+pydantic-settings>=2.6.0
+python-multipart>=0.0.12
+sqlalchemy>=2.0.0
+
+# ACE localization (install torch separately in your ACE conda env — do not upgrade)
+numpy>=1.24.0,<2
+scipy>=1.10.0
+Pillow>=9.0.0
+# OpenCV: prefer pip wheel (conda-forge 4.13 breaks findContours with numpy 1.26).
+# See scripts/fix_sup_opencv.sh
+opencv-python-headless==4.10.0.84
+
+# SALAD / NetVLAD / SuperPoint / LightGlue (install in ACE conda env)
+torchvision>=0.15.0
+kornia>=0.7.0
+
+# dsacstar: install separately from ace-main/dsacstar:
+#   cd ../../ace-main/dsacstar && pip install .

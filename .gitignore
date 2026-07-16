@@ -1,0 +1,45 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.env
+*.log
+
+# Node
+node_modules/
+dist/
+*.local
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Data & uploads (runtime)
+backend/data/
+backend/uploads/
+# Dataset
+data/
+backend/data/
+
+# Model weights
+models/
+weights/
+checkpoints/
+
+*.pth
+*.pt
+*.ckpt
+*.bin
+*.onnx
+
+# Third-party model files
+third_party/**/models/
+third_party/**/weights/
+third_party/**/checkpoints/
