@@ -62,7 +62,7 @@
 - **Python** 3.10+（推荐 Conda 独立环境，如 `sup`）
 - **Node.js** 18+
 - **NVIDIA GPU + CUDA**（推荐；CPU 可跑部分功能但较慢）
-- **PyTorch** 需单独安装（见下方「方式 B：Conda 环境 sup」或 `backend/requirements-sup.txt`）
+- **PyTorch** 需单独安装（见下方「方式 B：Conda 环境 sup」或 `backend/requirements.txt` 头部说明）
 
 ### 1. 克隆仓库
 
@@ -81,7 +81,6 @@ python3 -m venv .venv
 source .venv/bin/activate
 pip install torch==2.2.2 torchvision==0.17.2 --index-url https://download.pytorch.org/whl/cu118
 pip install -r requirements.txt
-pip install -e ../third_party/segment-anything
 bash scripts/fix_sup_opencv.sh
 ```
 
@@ -99,7 +98,7 @@ pip install torch==2.2.2 torchvision==0.17.2 \
 # 仅 CPU:    pip install torch==2.2.2 torchvision==0.17.2
 
 # 2) 其余 Python 依赖（含 SAM）
-pip install -r requirements-sup.txt
+pip install -r requirements.txt
 
 # 3) 修复 OpenCV / NumPy 兼容性（必做，勿用 conda install opencv）
 bash scripts/fix_sup_opencv.sh
@@ -212,8 +211,7 @@ scene-understanding-platform/
 │   │   └── db/                  # SQLAlchemy 模型与会话
 │   ├── scripts/
 │   │   └── fix_sup_opencv.sh    # OpenCV / NumPy 环境修复
-│   ├── requirements.txt
-│   └── requirements-sup.txt     # Conda sup 环境完整依赖
+│   └── requirements.txt         # Python 依赖（含 sup 环境安装说明）
 ├── frontend/
 │   └── src/
 │       ├── pages/               # 各功能页面
