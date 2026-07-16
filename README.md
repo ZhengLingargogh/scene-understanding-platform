@@ -114,9 +114,6 @@ curl http://127.0.0.1:8000/health
 # {"status":"ok","version":"0.1.0"}
 ```
 
-- 交互式 API 文档：<http://127.0.0.1:8000/docs>
-- OpenAPI JSON：<http://127.0.0.1:8000/openapi.json>
-
 ## 模型权重与数据集
 
 以下内容**不包含在 Git 仓库中**，需自行准备（见 `.gitignore`）。
