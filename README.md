@@ -62,7 +62,7 @@
 - **Python** 3.10+（推荐 Conda 独立环境，如 `sup`）
 - **Node.js** 18+
 - **NVIDIA GPU + CUDA**（推荐；CPU 可跑部分功能但较慢）
-- **PyTorch** 需单独安装（见 `requirements.txt` 注释）
+- **PyTorch** 需单独安装（见下方「方式 B：Conda 环境 sup」或 `backend/requirements-sup.txt`）
 
 ### 1. 克隆仓库
 
@@ -73,25 +73,41 @@ cd scene-understanding-platform
 
 ### 2. 后端
 
+#### 方式 A：venv
+
 ```bash
 cd backend
-
-# 方式 A：venv
 python3 -m venv .venv
 source .venv/bin/activate
+pip install torch==2.2.2 torchvision==0.17.2 --index-url https://download.pytorch.org/whl/cu118
 pip install -r requirements.txt
-# 另需安装与 CUDA 匹配的 torch，例如：
-# pip install torch==2.2.2 torchvision --index-url https://download.pytorch.org/whl/cu118
-
-# 方式 B：Conda（推荐）
-conda create -n sup python=3.10 -y
-conda activate sup
-pip install -r requirements.txt
-pip install torch==2.2.2 torchvision --index-url https://download.pytorch.org/whl/cu118
-bash scripts/fix_sup_opencv.sh   # 修复 OpenCV / NumPy 兼容性
+pip install -e ../third_party/segment-anything
+bash scripts/fix_sup_opencv.sh
 ```
 
-启动服务（在 `backend` 目录下）：
+#### 方式 B：Conda 环境 `sup`（推荐）
+
+```bash
+conda create -n sup python=3.10 -y
+conda activate sup
+cd backend
+
+# 1) PyTorch（按显卡/CUDA 选择；示例为 CUDA 11.8）
+pip install torch==2.2.2 torchvision==0.17.2 \
+    --index-url https://download.pytorch.org/whl/cu118
+# CUDA 12.1: 将 cu118 改为 cu121
+# 仅 CPU:    pip install torch==2.2.2 torchvision==0.17.2
+
+# 2) 其余 Python 依赖（含 SAM）
+pip install -r requirements-sup.txt
+
+# 3) 修复 OpenCV / NumPy 兼容性（必做，勿用 conda install opencv）
+bash scripts/fix_sup_opencv.sh
+```
+
+> **说明**：LightGlue 通过 `third_party/lightglue` 加入 `sys.path`，无需单独 `pip install`。
+
+启动服务（**必须在 `backend` 目录下**）：
 
 ```bash
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
@@ -113,6 +129,9 @@ npm run dev
 curl http://127.0.0.1:8000/health
 # {"status":"ok","version":"0.1.0"}
 ```
+
+- 交互式 API 文档：<http://127.0.0.1:8000/docs>
+- OpenAPI JSON：<http://127.0.0.1:8000/openapi.json>
 
 ## 模型权重与数据集
 
@@ -193,7 +212,8 @@ scene-understanding-platform/
 │   │   └── db/                  # SQLAlchemy 模型与会话
 │   ├── scripts/
 │   │   └── fix_sup_opencv.sh    # OpenCV / NumPy 环境修复
-│   └── requirements.txt
+│   ├── requirements.txt
+│   └── requirements-sup.txt     # Conda sup 环境完整依赖
 ├── frontend/
 │   └── src/
 │       ├── pages/               # 各功能页面
@@ -374,7 +394,7 @@ pip install opencv-python-headless==4.10.0.84
 
 ### PyTorch / CUDA
 
-请使用与显卡驱动匹配的 PyTorch 版本；推荐 `torch 2.2.x` + `numpy<2`，避免 NumPy 2.x 导致部分扩展库异常。
+请使用与显卡驱动匹配的 PyTorch 版本；推荐 `torch 2.2.2` + `torchvision 0.17.2` + `numpy<2`，避免 NumPy 2.x 导致部分扩展库异常。安装示例见上文「方式 B：Conda 环境 sup」。
 
 ### 自定义数据集浏览路径
 
